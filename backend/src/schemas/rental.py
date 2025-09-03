@@ -3,7 +3,7 @@ from typing import Optional
 from datetime import datetime
 
 class Rental(BaseModel):
-    rental_id: int
+    rental_id: Optional[int] = None
     rental_date: datetime
     inventory_id: int
     customer_id: int
