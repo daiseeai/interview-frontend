@@ -17,17 +17,11 @@ RUN apt-get update \
         curl \
     && rm -rf /var/lib/apt/lists/*
 
-# Install Poetry
-RUN pip install --no-cache-dir poetry
+# Copy requirements file
+COPY pyproject.toml ./
 
-# Copy poetry files
-COPY pyproject.toml poetry.lock* ./
-
-# Configure poetry: Don't create virtual environment, install dependencies to system
-RUN poetry config virtualenvs.create false
-
-# Install dependencies (only production dependencies)
-RUN poetry install --only=main --no-interaction --no-ansi
+# Install dependencies using pip
+RUN pip install --no-cache-dir fastapi[standard]==0.116.1 psycopg[binary]==3.2.9 uvicorn[standard]==0.35.0
 
 # Copy application code
 COPY . .
