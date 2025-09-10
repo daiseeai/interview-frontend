@@ -8,8 +8,9 @@ class AuthMiddleware:
         self.auth_token = AUTHORIZATION_TOKEN
     
     async def __call__(self, request: Request, call_next):
-        # Skip auth for health check endpoints and auth endpoints
-        if request.url.path in ["/", "/health", "/health/db", "/docs", "/redoc", "/openapi.json", "/api/v1/auth/verify"]:
+        # Skip auth for health check endpoints, auth endpoints, and OPTIONS requests (CORS preflight)
+        if (request.url.path in ["/", "/health", "/health/db", "/docs", "/redoc", "/openapi.json", "/api/v1/auth/verify"] or 
+            request.method == "OPTIONS"):
             return await call_next(request)
         
         # Get authorization token from header
